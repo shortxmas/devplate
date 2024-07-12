@@ -8,19 +8,35 @@ const main = async () => {
   let plates = await devplate.getDevplateRepositories();
   console.log(plates);
 
-  await devplate.addDevplateRepository("New devplate repo link");
+  console.log("\nAdding new repo");
+  await devplate.addDevplateRepository({
+    name: "New devplate repo name",
+    url: "New devplate repo URL",
+  });
   plates = await devplate.getDevplateRepositories();
   console.log(plates);
 
-  await devplate.addDevplateRepository("New devplate repo link");
+  console.log("\nAdding new repo");
+  await devplate.addDevplateRepository({
+    name: "New devplate repo name",
+    url: "New devplate repo URL",
+  });
   plates = await devplate.getDevplateRepositories();
   console.log(plates);
 
-  await devplate.removeDevplateRepository("New devplate repo link");
+  console.log("\nRemoving new repo");
+  await devplate.removeDevplateRepository({
+    name: "New devplate repo name",
+    url: "New devplate repo URL",
+  });
   plates = await devplate.getDevplateRepositories();
   console.log(plates);
 
-  await devplate.removeDevplateRepository("New devplate repo link");
+  console.log("\nRemoving new repo");
+  await devplate.removeDevplateRepository({
+    name: "New devplate repo name",
+    url: "New devplate repo URL",
+  });
   plates = await devplate.getDevplateRepositories();
   console.log(plates);
 };

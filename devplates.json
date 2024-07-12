@@ -1,5 +1,8 @@
 {
   "devplateRepositories": [
-    "Inital devplate link"
+    {
+      "name": "Default devplate repo name",
+      "url": "Default devplate repo URL"
+    }
   ]
 }

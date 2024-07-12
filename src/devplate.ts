@@ -1,18 +1,23 @@
 import { promises as fs } from "fs";
 import * as path from "path";
 
+interface DevplateRepository {
+  name: string;
+  url: string;
+}
+
 interface DevplateJson {
-  devplateRepositories: string[];
+  devplateRepositories: DevplateRepository[];
 }
 
 export class Devplate {
-  private devplateRepositories: Promise<string[]> | undefined;
+  private devplateRepositories: Promise<DevplateRepository[]> | undefined;
 
   constructor() {
     this.devplateRepositories = this.setDevplateRepositories();
   }
 
-  private setDevplateRepositories = async (): Promise<string[]> => {
+  private setDevplateRepositories = async (): Promise<DevplateRepository[]> => {
     const filePath = path.join(__dirname, "../devplates.json");
     let ret: DevplateJson = { devplateRepositories: [] };
     try {
@@ -26,11 +31,13 @@ export class Devplate {
   };
 
   private devplateRepositryExists = async (
-    devplateLink: string
+    repository: DevplateRepository
   ): Promise<boolean> => {
     const repositories = await this.devplateRepositories;
-    if (repositories && repositories.includes(devplateLink)) {
-      return true;
+    if (repositories) {
+      return repositories.some(
+        (repo) => repo.name === repository.name || repo.url === repository.url
+      );
     } else {
       return false;
     }
@@ -47,35 +54,51 @@ export class Devplate {
     this.devplateRepositories = this.setDevplateRepositories();
   };
 
-  public async getDevplateRepositories(): Promise<string[] | undefined> {
+  public async getDevplateRepositories(): Promise<
+    DevplateRepository[] | undefined
+  > {
     return this.devplateRepositories;
   }
 
-  public async addDevplateRepository(devplateLink: string): Promise<void> {
+  public async toString(): Promise<string | undefined> {
     const repositories = await this.getDevplateRepositories();
-    const repositoryExists = await this.devplateRepositryExists(devplateLink);
+    let ret = "";
+
+    return ret;
+  }
+
+  public async addDevplateRepository(
+    newRepository: DevplateRepository
+  ): Promise<void> {
+    const repositories = await this.getDevplateRepositories();
+    const repositoryExists = await this.devplateRepositryExists(newRepository);
     if (repositories && repositoryExists === false) {
-      repositories.push(devplateLink);
+      repositories.push(newRepository);
       await this.updateDevplateRepositoryJson({
         devplateRepositories: repositories,
       });
       console.log("Devplate repository has been added.");
     } else {
-      console.log("Devplate repository has not been added.");
+      console.log("Devplate repository name or URL already exists.");
     }
   }
 
-  public async removeDevplateRepository(devplateLink: string): Promise<void> {
+  public async removeDevplateRepository(
+    newRepository: DevplateRepository
+  ): Promise<void> {
     let repositories = await this.getDevplateRepositories();
-    const repositoryExists = await this.devplateRepositryExists(devplateLink);
+    const repositoryExists = await this.devplateRepositryExists(newRepository);
     if (repositories && repositoryExists === true) {
-      repositories = repositories.filter((repo) => repo !== devplateLink);
+      repositories = repositories.filter(
+        (repo) =>
+          repo.name !== newRepository.name && repo.url !== newRepository.url
+      );
       await this.updateDevplateRepositoryJson({
         devplateRepositories: repositories,
       });
       console.log("Devplate repository has been removed.");
     } else {
-      console.log("Devplate repository has not been removed.");
+      console.log("Devplate repository does not exist.");
     }
   }
 }
