@@ -12,7 +12,7 @@ export class Devplate {
     this.devplateRepositories = this.setDevplateRepositories();
   }
 
-  private setDevplateRepositories = async () => {
+  private setDevplateRepositories = async (): Promise<string[]> => {
     const filePath = path.join(__dirname, "../devplates.json");
     let ret: DevplateJson = { devplateRepositories: [] };
     try {
@@ -25,7 +25,9 @@ export class Devplate {
     return ret.devplateRepositories;
   };
 
-  private devplateRepositryExists = async (devplateLink: string) => {
+  private devplateRepositryExists = async (
+    devplateLink: string
+  ): Promise<boolean> => {
     const repositories = await this.devplateRepositories;
     if (repositories && repositories.includes(devplateLink)) {
       return true;
@@ -34,7 +36,9 @@ export class Devplate {
     }
   };
 
-  private updateDevplateRepositoryJson = async (newJson: DevplateJson) => {
+  private updateDevplateRepositoryJson = async (
+    newJson: DevplateJson
+  ): Promise<void> => {
     await fs.writeFile(
       path.join(__dirname, "../devplates.json"),
       JSON.stringify(newJson, null, 2),
@@ -43,11 +47,11 @@ export class Devplate {
     this.devplateRepositories = this.setDevplateRepositories();
   };
 
-  public async getDevplateRepositories() {
+  public async getDevplateRepositories(): Promise<string[] | undefined> {
     return this.devplateRepositories;
   }
 
-  public async addDevplateRepository(devplateLink: string) {
+  public async addDevplateRepository(devplateLink: string): Promise<void> {
     const repositories = await this.getDevplateRepositories();
     const repositoryExists = await this.devplateRepositryExists(devplateLink);
     if (repositories && repositoryExists === false) {
@@ -61,7 +65,7 @@ export class Devplate {
     }
   }
 
-  public async removeDevplateRepository(devplateLink: string) {
+  public async removeDevplateRepository(devplateLink: string): Promise<void> {
     let repositories = await this.getDevplateRepositories();
     const repositoryExists = await this.devplateRepositryExists(devplateLink);
     if (repositories && repositoryExists === true) {
