@@ -1,12 +1,28 @@
 #! /usr/bin/env node
 
-import { Devplate } from "./dp";
+import { Devplate } from "./devplate";
 
 const devplate = new Devplate();
 
-const test = async () => {
-  const plates = await devplate.getDevplateRepositories();
+const main = async () => {
+  let plates = await devplate.getDevplateRepositories();
+  console.log(plates);
+
+  await devplate.addDevplateRepository("New devplate repo link");
+  plates = await devplate.getDevplateRepositories();
+  console.log(plates);
+
+  await devplate.addDevplateRepository("New devplate repo link");
+  plates = await devplate.getDevplateRepositories();
+  console.log(plates);
+
+  await devplate.removeDevplateRepository("New devplate repo link");
+  plates = await devplate.getDevplateRepositories();
+  console.log(plates);
+
+  await devplate.removeDevplateRepository("New devplate repo link");
+  plates = await devplate.getDevplateRepositories();
   console.log(plates);
 };
 
-test();
+main();
