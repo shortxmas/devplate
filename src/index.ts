@@ -1,3 +1,12 @@
 #! /usr/bin/env node
 
-console.log("This is the start of my project!")
+import { Devplate } from "./dp";
+
+const devplate = new Devplate();
+
+const test = async () => {
+  const plates = await devplate.getDevplateRepositories();
+  console.log(plates);
+};
+
+test();
