@@ -1,5 +1,6 @@
 import { promises as fs } from "fs";
 import * as path from "path";
+import inquirer from "inquirer";
 
 interface DevplateRepository {
   name: string;
@@ -54,18 +55,55 @@ export class Devplate {
     this.devplateRepositories = this.setDevplateRepositories();
   };
 
-  public async getDevplateRepositories(): Promise<
+  public getDevplateRepositories = async (): Promise<
     DevplateRepository[] | undefined
-  > {
+  > => {
     return this.devplateRepositories;
-  }
+  };
 
-  public async toString(): Promise<string | undefined> {
+  private logDevplateRepositories = async (): Promise<void> => {
     const repositories = await this.getDevplateRepositories();
-    let ret = "";
+    repositories?.map((repository, index) => {
+      console.log(`\n${index + 1} : ${repository.name} | ${repository.url}`);
+    });
+  };
 
-    return ret;
-  }
+  public viewDevplates = async (): Promise<void> => {
+    const repositories = await this.getDevplateRepositories();
+    while (true) {
+      console.log("\n**************************************************");
+      await this.logDevplateRepositories();
+
+      console.log(
+        "\nPlease enter the Devplate repository ID to view Devplates in or enter 0 to exit."
+      );
+      const input = await inquirer.prompt({
+        name: "devplateRepoId",
+        type: "number",
+        message: "Enter Devplate repository ID : ",
+      });
+
+      switch (input.devplateRepoId) {
+        case 0:
+          process.exit(0);
+        default:
+          if (repositories) {
+            try {
+              // Add in command to show devplates in a devplate repository
+              console.log(
+                "Showing devplates in repository : ",
+                repositories[input.devplateRepoId - 1].name
+              );
+              process.exit(0);
+            } catch (error: any) {
+              console.log(
+                "The ID you entered doesn't match any Devplate repository."
+              );
+            }
+          }
+      }
+    }
+  };
 
   public async addDevplateRepository(
     newRepository: DevplateRepository
@@ -102,3 +140,42 @@ export class Devplate {
     }
   }
 }
+
+export const test = async () => {
+  const devplate = new Devplate();
+
+  let plates = await devplate.getDevplateRepositories();
+  console.log(plates);
+
+  console.log("\nAdding new repo");
+  await devplate.addDevplateRepository({
+    name: "New devplate repo name",
+    url: "New devplate repo URL",
+  });
+  plates = await devplate.getDevplateRepositories();
+  console.log(plates);
+
+  console.log("\nAdding new repo");
+  await devplate.addDevplateRepository({
+    name: "New devplate repo name",
+    url: "New devplate repo URL",
+  });
+  plates = await devplate.getDevplateRepositories();
+  console.log(plates);
+
+  console.log("\nRemoving new repo");
+  await devplate.removeDevplateRepository({
+    name: "New devplate repo name",
+    url: "New devplate repo URL",
+  });
+  plates = await devplate.getDevplateRepositories();
+  console.log(plates);
+
+  console.log("\nRemoving new repo");
+  await devplate.removeDevplateRepository({
+    name: "New devplate repo name",
+    url: "New devplate repo URL",
+  });
+  plates = await devplate.getDevplateRepositories();
+  console.log(plates);
+};
