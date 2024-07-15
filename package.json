@@ -17,6 +17,7 @@
   "description": "",
   "dependencies": {
     "inquirer": "^10.0.1",
+    "shell": "^0.9.6",
     "shelljs": "^0.8.5",
     "ts-node": "^10.9.2",
     "typescript": "^5.5.3",

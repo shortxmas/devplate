@@ -1,8 +1,8 @@
 {
   "devplateRepositories": [
     {
-      "name": "Default devplate repo name",
-      "url": "Default devplate repo URL"
+      "name": "Example Devplate Repository",
+      "url": "https://github.com/shortxmas/example-devplate-repository"
     }
   ]
 }

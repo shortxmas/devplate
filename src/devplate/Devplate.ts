@@ -1,6 +1,7 @@
 import { promises as fs } from "fs";
 import * as path from "path";
 import inquirer from "inquirer";
+import { Puller } from "../puller/Puller";
 
 interface DevplateRepository {
   name: string;
@@ -89,11 +90,15 @@ export class Devplate {
         default:
           if (repositories) {
             try {
-              // Add in command to show devplates in a devplate repository
               console.log(
                 "Showing devplates in repository : ",
                 repositories[input.devplateRepoId - 1].name
               );
+              const puller = new Puller(
+                repositories[input.devplateRepoId - 1].url
+              );
+              await puller.logDevplates();
+
               process.exit(0);
             } catch (error: any) {
               console.log(
