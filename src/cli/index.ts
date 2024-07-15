@@ -1,22 +1,9 @@
 #! /usr/bin/env node
 
 import { Devplate } from "../devplate/Devplate";
-import { test } from "../devplate/Devplate";
 import yargs from "yargs";
 
 let commandArray = [];
-
-yargs.command({
-  command: "test",
-  describe: "Adding and removing Devplate repositories test function",
-  async handler() {
-    await test();
-  },
-});
-commandArray.push({
-  command: "test",
-  arguments: "",
-});
 
 yargs.command({
   command: "view",
