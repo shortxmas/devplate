@@ -1,5 +1,5 @@
 import { describe, expect, test } from "@jest/globals";
-import { Devplate } from "./Devplate";
+import { Devplate } from '../src/devplate/Devplate'
 
 describe("Devplate class", () => {
   const devplate = new Devplate();
