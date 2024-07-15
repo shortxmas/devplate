@@ -19,7 +19,7 @@ export class Devplate {
   }
 
   private setDevplateRepositories = async (): Promise<DevplateRepository[]> => {
-    const filePath = path.join(__dirname, "../devplates.json");
+    const filePath = path.join(__dirname, "../../devplates.json");
     let ret: DevplateJson = { devplateRepositories: [] };
     try {
       const fileData = await fs.readFile(filePath, "utf-8");
@@ -48,17 +48,11 @@ export class Devplate {
     newJson: DevplateJson
   ): Promise<void> => {
     await fs.writeFile(
-      path.join(__dirname, "../devplates.json"),
+      path.join(__dirname, "../../devplates.json"),
       JSON.stringify(newJson, null, 2),
       "utf-8"
     );
     this.devplateRepositories = this.setDevplateRepositories();
-  };
-
-  public getDevplateRepositories = async (): Promise<
-    DevplateRepository[] | undefined
-  > => {
-    return this.devplateRepositories;
   };
 
   private logDevplateRepositories = async (): Promise<void> => {
@@ -66,6 +60,12 @@ export class Devplate {
     repositories?.map((repository, index) => {
       console.log(`\n${index + 1} : ${repository.name} | ${repository.url}`);
     });
+  };
+
+  public getDevplateRepositories = async (): Promise<
+    DevplateRepository[] | undefined
+  > => {
+    return this.devplateRepositories;
   };
 
   public viewDevplates = async (): Promise<void> => {
@@ -107,7 +107,7 @@ export class Devplate {
 
   public async addDevplateRepository(
     newRepository: DevplateRepository
-  ): Promise<void> {
+  ): Promise<number> {
     const repositories = await this.getDevplateRepositories();
     const repositoryExists = await this.devplateRepositryExists(newRepository);
     if (repositories && repositoryExists === false) {
@@ -116,14 +116,16 @@ export class Devplate {
         devplateRepositories: repositories,
       });
       console.log("Devplate repository has been added.");
+      return 1;
     } else {
       console.log("Devplate repository name or URL already exists.");
+      return 0;
     }
   }
 
   public async removeDevplateRepository(
     newRepository: DevplateRepository
-  ): Promise<void> {
+  ): Promise<number> {
     let repositories = await this.getDevplateRepositories();
     const repositoryExists = await this.devplateRepositryExists(newRepository);
     if (repositories && repositoryExists === true) {
@@ -135,8 +137,10 @@ export class Devplate {
         devplateRepositories: repositories,
       });
       console.log("Devplate repository has been removed.");
+      return 1;
     } else {
       console.log("Devplate repository does not exist.");
+      return 0;
     }
   }
 }

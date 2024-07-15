@@ -1,7 +1,7 @@
 #! /usr/bin/env node
 
-import { Devplate } from "../devplate";
-import { test } from "../devplate";
+import { Devplate } from "../devplate/Devplate";
+import { test } from "../devplate/Devplate";
 import yargs from "yargs";
 
 let commandArray = [];
