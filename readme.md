@@ -9,8 +9,8 @@
 
 ## Installation
 
-https://www.npmjs.com/package/pmp-hub
-Run ```npm install -g devplate``` to install the pmp-hub CLI globally.
+https://www.npmjs.com/package/devplate
+Run ```npm install -g devplate``` to install the Devplate CLI globally.
 
 ## Getting Started
 
