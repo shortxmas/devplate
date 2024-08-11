@@ -59,22 +59,18 @@ export class Devplate {
   private logDevplateRepositories = async (): Promise<void> => {
     const repositories = await this.getDevplateRepositories();
     repositories?.map((repository, index) => {
-      console.log(`\n${index + 1} : ${repository.name} | ${repository.url}`);
+      console.log(`\n${index + 1} : ${repository.name} | ${repository.url}\n`);
     });
   };
 
   private selectDevplateRepository = async (): Promise<number> => {
     while (true) {
-      console.log("\n**************************************************");
       await this.logDevplateRepositories();
-
-      console.log(
-        "\nPlease enter the Devplate repository ID to view Devplates in or enter 0 to exit."
-      );
       const input = await inquirer.prompt({
         name: "devplateRepoId",
         type: "number",
-        message: "Enter Devplate repository ID : ",
+        message:
+          "Please enter the Devplate repository ID to view Devplates in or enter 0 to exit.",
       });
 
       return input.devplateRepoId;
@@ -90,7 +86,6 @@ export class Devplate {
   public viewDevplates = async (): Promise<void> => {
     const repositories = await this.getDevplateRepositories();
     const devplateRepoId = await this.selectDevplateRepository();
-    console.log(devplateRepoId);
 
     switch (devplateRepoId) {
       case 0:
@@ -103,6 +98,7 @@ export class Devplate {
               repositories[devplateRepoId - 1].name
             );
             const puller = new Puller(repositories[devplateRepoId - 1].url);
+            await puller.initialize()
             await puller.logDevplates();
 
             process.exit(0);
