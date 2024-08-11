@@ -83,6 +83,34 @@ export class Devplate {
     return this.devplateRepositories;
   };
 
+  public selectDevplate = async (): Promise<void> => {
+    const repositories = await this.getDevplateRepositories();
+    const devplateRepoId = await this.selectDevplateRepository();
+
+    switch (devplateRepoId) {
+      case 0:
+        process.exit(0);
+      default:
+        if (repositories) {
+          try {
+            console.log(
+              "Showing devplates in repository : ",
+              repositories[devplateRepoId - 1].name
+            );
+            const puller = new Puller(repositories[devplateRepoId - 1].url);
+            await puller.initialize();
+            await puller.pullDevplate();
+
+            process.exit(0);
+          } catch (error: any) {
+            console.log(
+              "The ID you entered doesn't match any Devplate repository."
+            );
+          }
+        }
+    }
+  };
+
   public viewDevplates = async (): Promise<void> => {
     const repositories = await this.getDevplateRepositories();
     const devplateRepoId = await this.selectDevplateRepository();
@@ -98,7 +126,7 @@ export class Devplate {
               repositories[devplateRepoId - 1].name
             );
             const puller = new Puller(repositories[devplateRepoId - 1].url);
-            await puller.initialize()
+            await puller.initialize();
             await puller.logDevplates();
 
             process.exit(0);

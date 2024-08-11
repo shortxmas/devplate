@@ -6,6 +6,19 @@ import yargs from "yargs";
 let commandArray = [];
 
 yargs.command({
+  command: "select",
+  describe: "Select a Devplate to pull down",
+  async handler() {
+    const devplate = new Devplate();
+    await devplate.selectDevplate();
+  },
+});
+commandArray.push({
+  command: "select",
+  arguments: "",
+});
+
+yargs.command({
   command: "view",
   describe: "View devplates",
   async handler() {

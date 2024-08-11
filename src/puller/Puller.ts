@@ -54,13 +54,12 @@ export class Puller {
 
   private selectDevplate = async () => {
     while (true) {
-      console.log("\n**************************************************");
       await this.logDevplates();
       const input = await inquirer.prompt({
         name: "devplateId",
         type: "number",
         message:
-          "Please enter the Devplate ID number you would like to pull down",
+          "Please enter the Devplate ID number you would like to pull down or 0 to exit : ",
       });
 
       return input.devplateId;
@@ -78,44 +77,44 @@ export class Puller {
     }
   };
 
-  // public pullDevplate = async ()=>{
-  //   const devplateId = await this.selectDevplate();
+  public pullDevplate = async () => {
+    const devplateId = await this.selectDevplate();
 
-  //   switch (devplateId) {
-  //     case 0:
-  //       process.exit(0);
-  //     default:
-  //       if (repositories) {
-  //         try {
-  //           console.log(
-  //             "Showing devplates in repository : ",
-  //             repositories[devplateRepoId - 1].name
-  //           );
-  //           const puller = new Puller(repositories[devplateRepoId - 1].url);
-  //           await puller.logDevplates();
+    switch (devplateId) {
+      case 0:
+        process.exit(0);
+      default:
+        if (this.devplates) {
+          try {
+            console.log(
+              `Pulling Devplate ${this.devplates[devplateId - 1].name}`
+            );
+            this.cloneGithubSubdirectory(
+              this.repositoryUrl,
+              this.devplates[devplateId - 1].name
+            );
 
-  //           process.exit(0);
-  //         } catch (error: any) {
-  //           console.log(
-  //             "The ID you entered doesn't match any Devplate repository."
-  //           );
-  //         }
-  //       }
-  //   }
+            process.exit(0);
+          } catch (error: any) {
+            console.log(
+              "The ID you entered doesn't match any Devplate repository."
+            );
+          }
+        }
+    }
+  };
 
-  // }
-
-  // cloneGithubSubdirectory = (repoUrl, subdirectory) => {
-  //   try {
-  //     shell.exec(`git clone --depth 1 ${repoUrl} temp_dir`);
-  //     shell.cp("-Rf", `temp_dir/pmps/${subdirectory}/.`, ".");
-  //     console.log(
-  //       `Successfully cloned contents of ${subdirectory} from ${repoUrl}`
-  //     );
-  //   } catch (error) {
-  //     console.error("Error:", error.message);
-  //   } finally {
-  //     shell.rm("-rf", "temp_dir");
-  //   }
-  // };
+  cloneGithubSubdirectory = (repoUrl: string, subdirectory: string) => {
+    try {
+      shell.exec(`git clone --depth 1 ${repoUrl} temp_dir`);
+      shell.cp("-Rf", `temp_dir/${subdirectory}/.`, ".");
+      console.log(
+        `Successfully cloned contents of ${subdirectory} from ${repoUrl}`
+      );
+    } catch (error) {
+      console.error("Error:", error);
+    } finally {
+      shell.rm("-rf", "temp_dir");
+    }
+  };
 }
