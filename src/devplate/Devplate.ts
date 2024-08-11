@@ -115,9 +115,9 @@ export class Devplate {
     }
   };
 
-  public async addDevplateRepository(
+  public addDevplateRepository = async (
     newRepository: DevplateRepository
-  ): Promise<number> {
+  ): Promise<number> => {
     const repositories = await this.getDevplateRepositories();
     const repositoryExists = await this.devplateRepositryExists(newRepository);
     if (repositories && repositoryExists === false) {
@@ -131,11 +131,11 @@ export class Devplate {
       console.log("Devplate repository name or URL already exists.");
       return 0;
     }
-  }
+  };
 
-  public async removeDevplateRepository(
+  public removeDevplateRepository = async (
     newRepository: DevplateRepository
-  ): Promise<number> {
+  ): Promise<number> => {
     let repositories = await this.getDevplateRepositories();
     const repositoryExists = await this.devplateRepositryExists(newRepository);
     if (repositories && repositoryExists === true) {
@@ -152,5 +152,5 @@ export class Devplate {
       console.log("Devplate repository does not exist.");
       return 0;
     }
-  }
+  };
 }

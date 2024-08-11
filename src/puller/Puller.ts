@@ -15,7 +15,7 @@ export class Puller {
     return this.repositoryUrl;
   };
 
-  private toGithubApIurl(repoUrl: string): string | null {
+  private toGithubApIurl = (repoUrl: string): string | null => {
     const githubUrlRegex =
       /^(?:https?:\/\/)?(?:www\.)?github\.com\/([^\/]+)\/([^\/]+)$/i;
     const match = repoUrl.match(githubUrlRegex);
@@ -27,7 +27,7 @@ export class Puller {
     } else {
       return null;
     }
-  }
+  };
 
   public logDevplates = async () => {
     const fetchUrl = this.toGithubApIurl(this.getRepositoryUrl());
