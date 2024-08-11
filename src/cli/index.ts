@@ -85,15 +85,13 @@ commandArray.push({
 });
 
 const logExistingCommands = () => {
-  let counter = 1;
   console.log("Existing commands:");
-  commandArray.forEach((command) => {
+  commandArray.map((command, index) => {
     if (command.arguments != "") {
-      console.log(`${counter}:${command.command} ${command.arguments}`);
+      console.log(`${index + 1}:${command.command} ${command.arguments}`);
     } else {
-      console.log(`${counter}:${command.command}`);
+      console.log(`${index + 1}:${command.command}`);
     }
-    counter++;
   });
 };
 
