@@ -56,14 +56,15 @@ export class Devplate {
     this.devplateRepositories = this.setDevplateRepositories();
   };
 
-  private selectDevplateRepository = async (): Promise<number> => {
+  private selectDevplateRepository = async (
+    message: string
+  ): Promise<number> => {
     while (true) {
       await this.logDevplateRepositories();
       const input = await inquirer.prompt({
         name: "devplateRepoId",
         type: "number",
-        message:
-          "Please enter the Devplate repository ID to view Devplates in or enter 0 to exit.",
+        message: message,
       });
 
       return input.devplateRepoId;
@@ -73,7 +74,7 @@ export class Devplate {
   public logDevplateRepositories = async (): Promise<void> => {
     const repositories = await this.getDevplateRepositories();
     repositories?.map((repository, index) => {
-      console.log(`\n${index + 1} : ${repository.name} | ${repository.url}\n`);
+      console.log(`${index + 1} : ${repository.name} | ${repository.url}`);
     });
   };
 
@@ -85,7 +86,9 @@ export class Devplate {
 
   public selectDevplate = async (): Promise<void> => {
     const repositories = await this.getDevplateRepositories();
-    const devplateRepoId = await this.selectDevplateRepository();
+    const devplateRepoId = await this.selectDevplateRepository(
+      "Please enter the Devplate repository ID to view Devplates in or enter 0 to exit."
+    );
 
     switch (devplateRepoId) {
       case 0:
@@ -113,7 +116,9 @@ export class Devplate {
 
   public viewDevplates = async (): Promise<void> => {
     const repositories = await this.getDevplateRepositories();
-    const devplateRepoId = await this.selectDevplateRepository();
+    const devplateRepoId = await this.selectDevplateRepository(
+      "Please enter the Devplate repository ID to view Devplates in or enter 0 to exit."
+    );
 
     switch (devplateRepoId) {
       case 0:
@@ -158,6 +163,31 @@ export class Devplate {
       url: devplateRepoUrl.url,
     };
     this.addDevplateRepository(newRepository);
+  };
+
+  public promptRemoveDevplateRepository = async () => {
+    const repositories = await this.getDevplateRepositories();
+
+    const devplateRepoId = await this.selectDevplateRepository(
+      "Please enter the ID of the Devplate repository you would like to delete or enter 0 to exit."
+    );
+    switch (devplateRepoId) {
+      case 0:
+        process.exit(0);
+      default:
+        if (repositories) {
+          try {
+            await this.removeDevplateRepository(
+              repositories[devplateRepoId - 1]
+            );
+            process.exit(0);
+          } catch (error: any) {
+            console.log(
+              "The ID you entered doesn't match any Devplate repository."
+            );
+          }
+        }
+    }
   };
 
   public addDevplateRepository = async (

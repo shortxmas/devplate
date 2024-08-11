@@ -6,15 +6,55 @@ import yargs from "yargs";
 let commandArray = [];
 
 yargs.command({
-  command: "add",
-  describe: "Add a new Devplate repository",
-  async handler() {
-    const devplate = new Devplate();
-    await devplate.promptAddDevplateRepository();
+  command: "repo",
+  describe: "Repository commands",
+  builder: (yargs) => {
+    yargs.command({
+      command: "add",
+      describe: "Add a new Devplate repository",
+      async handler() {
+        const devplate = new Devplate();
+        await devplate.promptAddDevplateRepository();
+      },
+    });
+
+    yargs.command({
+      command: "view",
+      describe: "View Devplate repositories",
+      async handler() {
+        const devplate = new Devplate();
+        await devplate.logDevplateRepositories();
+      },
+    });
+
+    yargs.command({
+      command: "remove",
+      describe: "Remove a Devplate repositories",
+      async handler() {
+        const devplate = new Devplate();
+        await devplate.promptRemoveDevplateRepository();
+      },
+    });
+
+    return yargs;
+  },
+  handler: () => {
+    console.log(
+      "Please specify a valid subcommand, e.g., 'dp repo add' or 'dp repo view'."
+    );
   },
 });
+
 commandArray.push({
-  command: "select",
+  command: "repo add",
+  arguments: "",
+});
+commandArray.push({
+  command: "repo remove",
+  arguments: "",
+});
+commandArray.push({
+  command: "repo view",
   arguments: "",
 });
 
@@ -37,19 +77,6 @@ yargs.command({
   async handler() {
     const devplate = new Devplate();
     await devplate.viewDevplates();
-  },
-});
-commandArray.push({
-  command: "view",
-  arguments: "",
-});
-
-yargs.command({
-  command: "repo view",
-  describe: "View devplate repositories",
-  async handler() {
-    const devplate = new Devplate();
-    await devplate.logDevplateRepositories();
   },
 });
 commandArray.push({
