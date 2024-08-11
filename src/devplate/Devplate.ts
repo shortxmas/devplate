@@ -63,14 +63,7 @@ export class Devplate {
     });
   };
 
-  public getDevplateRepositories = async (): Promise<
-    DevplateRepository[] | undefined
-  > => {
-    return this.devplateRepositories;
-  };
-
-  public viewDevplates = async (): Promise<void> => {
-    const repositories = await this.getDevplateRepositories();
+  private selectDevplateRepository = async (): Promise<number> => {
     while (true) {
       console.log("\n**************************************************");
       await this.logDevplateRepositories();
@@ -84,29 +77,41 @@ export class Devplate {
         message: "Enter Devplate repository ID : ",
       });
 
-      switch (input.devplateRepoId) {
-        case 0:
-          process.exit(0);
-        default:
-          if (repositories) {
-            try {
-              console.log(
-                "Showing devplates in repository : ",
-                repositories[input.devplateRepoId - 1].name
-              );
-              const puller = new Puller(
-                repositories[input.devplateRepoId - 1].url
-              );
-              await puller.logDevplates();
+      return input.devplateRepoId;
+    }
+  };
 
-              process.exit(0);
-            } catch (error: any) {
-              console.log(
-                "The ID you entered doesn't match any Devplate repository."
-              );
-            }
+  public getDevplateRepositories = async (): Promise<
+    DevplateRepository[] | undefined
+  > => {
+    return this.devplateRepositories;
+  };
+
+  public viewDevplates = async (): Promise<void> => {
+    const repositories = await this.getDevplateRepositories();
+    const devplateRepoId = await this.selectDevplateRepository();
+    console.log(devplateRepoId);
+
+    switch (devplateRepoId) {
+      case 0:
+        process.exit(0);
+      default:
+        if (repositories) {
+          try {
+            console.log(
+              "Showing devplates in repository : ",
+              repositories[devplateRepoId - 1].name
+            );
+            const puller = new Puller(repositories[devplateRepoId - 1].url);
+            await puller.logDevplates();
+
+            process.exit(0);
+          } catch (error: any) {
+            console.log(
+              "The ID you entered doesn't match any Devplate repository."
+            );
           }
-      }
+        }
     }
   };
 
