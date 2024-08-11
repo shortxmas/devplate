@@ -6,6 +6,19 @@ import yargs from "yargs";
 let commandArray = [];
 
 yargs.command({
+  command: "add",
+  describe: "Add a new Devplate repository",
+  async handler() {
+    const devplate = new Devplate();
+    await devplate.promptAddDevplateRepository();
+  },
+});
+commandArray.push({
+  command: "select",
+  arguments: "",
+});
+
+yargs.command({
   command: "select",
   describe: "Select a Devplate to pull down",
   async handler() {
@@ -24,6 +37,19 @@ yargs.command({
   async handler() {
     const devplate = new Devplate();
     await devplate.viewDevplates();
+  },
+});
+commandArray.push({
+  command: "view",
+  arguments: "",
+});
+
+yargs.command({
+  command: "repo view",
+  describe: "View devplate repositories",
+  async handler() {
+    const devplate = new Devplate();
+    await devplate.logDevplateRepositories();
   },
 });
 commandArray.push({

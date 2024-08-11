@@ -56,13 +56,6 @@ export class Devplate {
     this.devplateRepositories = this.setDevplateRepositories();
   };
 
-  private logDevplateRepositories = async (): Promise<void> => {
-    const repositories = await this.getDevplateRepositories();
-    repositories?.map((repository, index) => {
-      console.log(`\n${index + 1} : ${repository.name} | ${repository.url}\n`);
-    });
-  };
-
   private selectDevplateRepository = async (): Promise<number> => {
     while (true) {
       await this.logDevplateRepositories();
@@ -75,6 +68,13 @@ export class Devplate {
 
       return input.devplateRepoId;
     }
+  };
+
+  public logDevplateRepositories = async (): Promise<void> => {
+    const repositories = await this.getDevplateRepositories();
+    repositories?.map((repository, index) => {
+      console.log(`\n${index + 1} : ${repository.name} | ${repository.url}\n`);
+    });
   };
 
   public getDevplateRepositories = async (): Promise<
@@ -137,6 +137,27 @@ export class Devplate {
           }
         }
     }
+  };
+
+  public promptAddDevplateRepository = async () => {
+    const devplateRepoUrl = await inquirer.prompt({
+      name: "url",
+      type: "input",
+      message: "Please enter the Devplate repository URL or enter 0 to exit.",
+    });
+
+    const devplateRepoName = await inquirer.prompt({
+      name: "name",
+      type: "input",
+      message:
+        "Please enter a name for your Devplate repository or enter 0 to exit.",
+    });
+
+    const newRepository: DevplateRepository = {
+      name: devplateRepoName.name,
+      url: devplateRepoUrl.url,
+    };
+    this.addDevplateRepository(newRepository);
   };
 
   public addDevplateRepository = async (
