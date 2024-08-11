@@ -35,18 +35,17 @@ export class Puller {
       `\nFetching list of Devplate names in repository ${fetchUrl}\n`
     );
     try {
-      if (fetchUrl) {
-        const response = await fetch(fetchUrl);
-        if (!response.ok) {
-          throw new Error("Failed to fetch data");
-        }
-        const jsonData: Devplate[] = await response.json();
-        jsonData.map((devplate: Devplate, index: number) => {
-          console.log(`${index + 1}. ${devplate.name}`);
-        });
-      } else {
+      if (!fetchUrl) {
         throw new Error("Failed to fetch data");
       }
+      const response = await fetch(fetchUrl);
+      if (!response.ok) {
+        throw new Error("Failed to fetch data");
+      }
+      const jsonData: Devplate[] = await response.json();
+      jsonData.map((devplate: Devplate, index: number) => {
+        console.log(`${index + 1}. ${devplate.name}`);
+      });
     } catch (error) {
       console.log(error);
     }
