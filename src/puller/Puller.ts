@@ -66,6 +66,20 @@ export class Puller {
     }
   };
 
+  private cloneGithubSubdirectory = (repoUrl: string, subdirectory: string) => {
+    try {
+      shell.exec(`git clone --depth 1 ${repoUrl} temp_dir`);
+      shell.cp("-Rf", `temp_dir/${subdirectory}/.`, ".");
+      console.log(
+        `Successfully cloned contents of ${subdirectory} from ${repoUrl}`
+      );
+    } catch (error) {
+      console.error("Error:", error);
+    } finally {
+      shell.rm("-rf", "temp_dir");
+    }
+  };
+
   public logDevplates = async () => {
     console.log(
       `\nFetching list of Devplate names in repository ${this.repositoryUrl}\n`
@@ -101,20 +115,6 @@ export class Puller {
             );
           }
         }
-    }
-  };
-
-  cloneGithubSubdirectory = (repoUrl: string, subdirectory: string) => {
-    try {
-      shell.exec(`git clone --depth 1 ${repoUrl} temp_dir`);
-      shell.cp("-Rf", `temp_dir/${subdirectory}/.`, ".");
-      console.log(
-        `Successfully cloned contents of ${subdirectory} from ${repoUrl}`
-      );
-    } catch (error) {
-      console.error("Error:", error);
-    } finally {
-      shell.rm("-rf", "temp_dir");
     }
   };
 }
