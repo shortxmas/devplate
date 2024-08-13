@@ -33,7 +33,7 @@ yargs.command({
       describe: "View Devplate repositories",
       async handler() {
         const devplateInstance = await getDevplateInstance();
-        await devplateInstance.logDevplateRepositories();
+        devplateInstance.logDevplateRepositories();
       },
     });
 
