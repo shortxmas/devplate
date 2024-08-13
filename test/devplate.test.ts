@@ -26,7 +26,7 @@ describe("Devplate", () => {
     jest.clearAllMocks();
   });
 
-  describe("setDevplateRepositories", () => {
+  describe("initalizeDevplateRepositories", () => {
     test("should read and parse devplates.json", async () => {
       const mockData = JSON.stringify({
         devplateRepositories: [{ name: "Repo1", url: "https://repo1.com" }],
@@ -34,30 +34,33 @@ describe("Devplate", () => {
       (fs.readFile as jest.Mock).mockResolvedValue(mockData as never);
       (path.join as jest.Mock).mockReturnValue("/mock/path/devplates.json");
 
-      const repositories = await devplate["setDevplateRepositories"]();
+      await devplate.initalizeDevplateRepositories();
 
       expect(fs.readFile).toHaveBeenCalledWith(
         "/mock/path/devplates.json",
         "utf-8"
       );
-      expect(repositories).toEqual([
+      expect(devplate.getDevplateRepositories()).resolves.toEqual([
         { name: "Repo1", url: "https://repo1.com" },
       ]);
     });
 
-    test("should return an empty array if an error occurs", async () => {
+    test("should handle error and set an empty array if an error occurs", async () => {
       (fs.readFile as jest.Mock).mockRejectedValue(
         new Error("File read error") as never
       );
-      const repositories = await devplate["setDevplateRepositories"]();
-      expect(repositories).toEqual([]);
+
+      await devplate.initalizeDevplateRepositories();
+
+      expect(devplate.getDevplateRepositories()).resolves.toEqual([]);
     });
   });
 
   describe("devplateRepositryExists", () => {
     test("should return true if repository exists", async () => {
-      const mockRepositories = [{ name: "Repo1", url: "https://repo1.com" }];
-      devplate["devplateRepositories"] = Promise.resolve(mockRepositories);
+      devplate["devplateRepositories"] = [
+        { name: "Repo1", url: "https://repo1.com" },
+      ];
 
       const exists = await devplate["devplateRepositryExists"]({
         name: "Repo1",
@@ -68,8 +71,9 @@ describe("Devplate", () => {
     });
 
     test("should return false if repository does not exist", async () => {
-      const mockRepositories = [{ name: "Repo1", url: "https://repo1.com" }];
-      devplate["devplateRepositories"] = Promise.resolve(mockRepositories);
+      devplate["devplateRepositories"] = [
+        { name: "Repo1", url: "https://repo1.com" },
+      ];
 
       const exists = await devplate["devplateRepositryExists"]({
         name: "Repo2",
@@ -99,8 +103,9 @@ describe("Devplate", () => {
 
   describe("addDevplateRepository", () => {
     test("should add a new repository if it does not exist", async () => {
-      const mockRepositories = [{ name: "Repo1", url: "https://repo1.com" }];
-      devplate["devplateRepositories"] = Promise.resolve(mockRepositories);
+      devplate["devplateRepositories"] = [
+        { name: "Repo1", url: "https://repo1.com" },
+      ];
 
       const newRepository = { name: "Repo2", url: "https://repo2.com" };
       const result = await devplate.addDevplateRepository(newRepository);
@@ -110,8 +115,9 @@ describe("Devplate", () => {
     });
 
     test("should not add a repository if it already exists", async () => {
-      const mockRepositories = [{ name: "Repo1", url: "https://repo1.com" }];
-      devplate["devplateRepositories"] = Promise.resolve(mockRepositories);
+      devplate["devplateRepositories"] = [
+        { name: "Repo1", url: "https://repo1.com" },
+      ];
 
       const newRepository = { name: "Repo1", url: "https://repo1.com" };
       const result = await devplate.addDevplateRepository(newRepository);
@@ -123,8 +129,9 @@ describe("Devplate", () => {
 
   describe("removeDevplateRepository", () => {
     test("should remove an existing repository", async () => {
-      const mockRepositories = [{ name: "Repo1", url: "https://repo1.com" }];
-      devplate["devplateRepositories"] = Promise.resolve(mockRepositories);
+      devplate["devplateRepositories"] = [
+        { name: "Repo1", url: "https://repo1.com" },
+      ];
 
       const repositoryToRemove = { name: "Repo1", url: "https://repo1.com" };
       const result = await devplate.removeDevplateRepository(
@@ -136,8 +143,9 @@ describe("Devplate", () => {
     });
 
     test("should not remove a repository if it does not exist", async () => {
-      const mockRepositories = [{ name: "Repo1", url: "https://repo1.com" }];
-      devplate["devplateRepositories"] = Promise.resolve(mockRepositories);
+      devplate["devplateRepositories"] = [
+        { name: "Repo1", url: "https://repo1.com" },
+      ];
 
       const repositoryToRemove = { name: "Repo2", url: "https://repo2.com" };
       const result = await devplate.removeDevplateRepository(

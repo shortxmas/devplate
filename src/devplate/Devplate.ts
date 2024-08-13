@@ -13,13 +13,13 @@ interface DevplateJson {
 }
 
 export class Devplate {
-  private devplateRepositories: Promise<DevplateRepository[]> | undefined;
+  private devplateRepositories: DevplateRepository[];
 
   constructor() {
-    this.devplateRepositories = this.setDevplateRepositories();
+    this.devplateRepositories = [];
   }
 
-  private setDevplateRepositories = async (): Promise<DevplateRepository[]> => {
+  public initalizeDevplateRepositories = async (): Promise<void> => {
     const filePath = path.join(__dirname, "../../devplates.json");
     let ret: DevplateJson = { devplateRepositories: [] };
     try {
@@ -29,7 +29,7 @@ export class Devplate {
     } catch (e: any) {
       console.error(e);
     }
-    return ret.devplateRepositories;
+    this.devplateRepositories = ret.devplateRepositories;
   };
 
   private devplateRepositryExists = async (
@@ -53,7 +53,7 @@ export class Devplate {
       JSON.stringify(newJson, null, 2),
       "utf-8"
     );
-    this.devplateRepositories = this.setDevplateRepositories();
+    this.initalizeDevplateRepositories();
   };
 
   private selectDevplateRepository = async (
@@ -151,6 +151,10 @@ export class Devplate {
       message: "Please enter the Devplate repository URL or enter 0 to exit.",
     });
 
+    if (devplateRepoUrl.url === "0") {
+      process.exit(0);
+    }
+
     const devplateRepoName = await inquirer.prompt({
       name: "name",
       type: "input",
@@ -158,11 +162,17 @@ export class Devplate {
         "Please enter a name for your Devplate repository or enter 0 to exit.",
     });
 
-    const newRepository: DevplateRepository = {
-      name: devplateRepoName.name,
-      url: devplateRepoUrl.url,
-    };
-    this.addDevplateRepository(newRepository);
+    if (devplateRepoName.name === "0") {
+      process.exit(0);
+    }
+
+    if (devplateRepoName.name !== "0" && devplateRepoUrl.url !== "0") {
+      const newRepository: DevplateRepository = {
+        name: devplateRepoName.name,
+        url: devplateRepoUrl.url,
+      };
+      this.addDevplateRepository(newRepository);
+    }
   };
 
   public promptRemoveDevplateRepository = async () => {

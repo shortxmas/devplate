@@ -5,6 +5,16 @@ import yargs from "yargs";
 
 let commandArray = [];
 
+let devplate: Devplate | null = null;
+
+const getDevplateInstance = async (): Promise<Devplate> => {
+  if (!devplate) {
+    devplate = new Devplate();
+    await devplate.initalizeDevplateRepositories();
+  }
+  return devplate;
+};
+
 yargs.command({
   command: "repo",
   describe: "Repository commands",
@@ -13,8 +23,8 @@ yargs.command({
       command: "add",
       describe: "Add a new Devplate repository",
       async handler() {
-        const devplate = new Devplate();
-        await devplate.promptAddDevplateRepository();
+        const devplateInstance = await getDevplateInstance();
+        await devplateInstance.promptAddDevplateRepository();
       },
     });
 
@@ -22,17 +32,17 @@ yargs.command({
       command: "view",
       describe: "View Devplate repositories",
       async handler() {
-        const devplate = new Devplate();
-        await devplate.logDevplateRepositories();
+        const devplateInstance = await getDevplateInstance();
+        await devplateInstance.logDevplateRepositories();
       },
     });
 
     yargs.command({
       command: "remove",
-      describe: "Remove a Devplate repositories",
+      describe: "Remove a Devplate repository",
       async handler() {
-        const devplate = new Devplate();
-        await devplate.promptRemoveDevplateRepository();
+        const devplateInstance = await getDevplateInstance();
+        await devplateInstance.promptRemoveDevplateRepository();
       },
     });
 
@@ -62,8 +72,8 @@ yargs.command({
   command: "select",
   describe: "Select a Devplate to pull down",
   async handler() {
-    const devplate = new Devplate();
-    await devplate.selectDevplate();
+    const devplateInstance = await getDevplateInstance();
+    await devplateInstance.selectDevplate();
   },
 });
 commandArray.push({
@@ -75,8 +85,8 @@ yargs.command({
   command: "view",
   describe: "View devplates",
   async handler() {
-    const devplate = new Devplate();
-    await devplate.viewDevplates();
+    const devplateInstance = await getDevplateInstance();
+    await devplateInstance.viewDevplates();
   },
 });
 commandArray.push({
@@ -87,7 +97,7 @@ commandArray.push({
 const logExistingCommands = () => {
   console.log("Existing commands:");
   commandArray.map((command, index) => {
-    if (command.arguments != "") {
+    if (command.arguments !== "") {
       console.log(`${index + 1}:${command.command} ${command.arguments}`);
     } else {
       console.log(`${index + 1}:${command.command}`);
