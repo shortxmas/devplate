@@ -3,7 +3,7 @@ on:
   push:
     branches:
       - main
-   
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -16,6 +16,25 @@ jobs:
       - name: Install Dependencies
         run: |
           npm install
+
+      - name: Get current package version
+        id: pkgversion
+        run: echo "VERSION=$(jq -r .version package.json)" >> $GITHUB_ENV
+
+      - name: Get latest published version from npm
+        id: npmlatestversion
+        run: echo "LATEST_VERSION=$(npm show $(jq -r .name package.json) version)" >> $GITHUB_ENV
+
+      - name: Compare versions
+        id: version_check
+        run: |
+          if [ "$VERSION" == "$LATEST_VERSION" ]; then
+            echo "Version $VERSION has already been published."
+            exit 1
+          else
+            echo "Version $VERSION is new. Proceeding with publish."
+          fi
+
       - run: npm publish .
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
