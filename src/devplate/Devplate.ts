@@ -19,7 +19,7 @@ export class Devplate {
     this.devplateRepositories = [];
   }
 
-  public initalizeDevplateRepositories = async (): Promise<void> => {
+  initalizeDevplateRepositories = async (): Promise<void> => {
     const filePath = path.join(__dirname, "../../devplates.json");
     let ret: DevplateJson = { devplateRepositories: [] };
     try {
@@ -32,10 +32,8 @@ export class Devplate {
     this.devplateRepositories = ret.devplateRepositories;
   };
 
-  private devplateRepositryExists = async (
-    repository: DevplateRepository
-  ): Promise<boolean> => {
-    const repositories = await this.devplateRepositories;
+  private devplateRepositoryExists = (repository: DevplateRepository) => {
+    const repositories = this.devplateRepositories;
     if (repositories) {
       return repositories.some(
         (repo) => repo.name === repository.name || repo.url === repository.url
@@ -71,21 +69,19 @@ export class Devplate {
     }
   };
 
-  public logDevplateRepositories = async (): Promise<void> => {
-    const repositories = await this.getDevplateRepositories();
+  public logDevplateRepositories = (): void => {
+    const repositories = this.getDevplateRepositories();
     repositories?.map((repository, index) => {
       console.log(`${index + 1} : ${repository.name} | ${repository.url}`);
     });
   };
 
-  public getDevplateRepositories = async (): Promise<
-    DevplateRepository[] | undefined
-  > => {
+  public getDevplateRepositories = (): DevplateRepository[] => {
     return this.devplateRepositories;
   };
 
   public selectDevplate = async (): Promise<void> => {
-    const repositories = await this.getDevplateRepositories();
+    const repositories = this.getDevplateRepositories();
     const devplateRepoId = await this.selectDevplateRepository(
       "Please enter the Devplate repository ID to view Devplates in or enter 0 to exit."
     );
@@ -115,7 +111,7 @@ export class Devplate {
   };
 
   public viewDevplates = async (): Promise<void> => {
-    const repositories = await this.getDevplateRepositories();
+    const repositories = this.getDevplateRepositories();
     const devplateRepoId = await this.selectDevplateRepository(
       "Please enter the Devplate repository ID to view Devplates in or enter 0 to exit."
     );
@@ -176,7 +172,7 @@ export class Devplate {
   };
 
   public promptRemoveDevplateRepository = async () => {
-    const repositories = await this.getDevplateRepositories();
+    const repositories = this.getDevplateRepositories();
 
     const devplateRepoId = await this.selectDevplateRepository(
       "Please enter the ID of the Devplate repository you would like to delete or enter 0 to exit."
@@ -203,8 +199,8 @@ export class Devplate {
   public addDevplateRepository = async (
     newRepository: DevplateRepository
   ): Promise<number> => {
-    const repositories = await this.getDevplateRepositories();
-    const repositoryExists = await this.devplateRepositryExists(newRepository);
+    const repositories = this.getDevplateRepositories();
+    const repositoryExists = this.devplateRepositoryExists(newRepository);
     if (repositories && repositoryExists === false) {
       repositories.push(newRepository);
       await this.updateDevplateRepositoryJson({
@@ -221,8 +217,8 @@ export class Devplate {
   public removeDevplateRepository = async (
     newRepository: DevplateRepository
   ): Promise<number> => {
-    let repositories = await this.getDevplateRepositories();
-    const repositoryExists = await this.devplateRepositryExists(newRepository);
+    let repositories = this.getDevplateRepositories();
+    const repositoryExists = this.devplateRepositoryExists(newRepository);
     if (repositories && repositoryExists === true) {
       repositories = repositories.filter(
         (repo) =>

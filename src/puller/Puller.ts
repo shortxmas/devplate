@@ -13,7 +13,7 @@ export class Puller {
     this.repositoryUrl = repositoryUrl;
   }
 
-  async initialize() {
+  initialize = async () => {
     const ret: Devplate[] = [];
     const fetchUrl = this.toGithubApIurl(this.getRepositoryUrl());
     try {
@@ -32,7 +32,7 @@ export class Puller {
       console.log(error);
     }
     this.devplates = ret;
-  }
+  };
 
   private getRepositoryUrl = (): string => {
     return this.repositoryUrl;

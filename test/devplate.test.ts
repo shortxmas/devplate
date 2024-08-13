@@ -40,7 +40,7 @@ describe("Devplate", () => {
         "/mock/path/devplates.json",
         "utf-8"
       );
-      expect(devplate.getDevplateRepositories()).resolves.toEqual([
+      expect(devplate.getDevplateRepositories()).toEqual([
         { name: "Repo1", url: "https://repo1.com" },
       ]);
     });
@@ -52,17 +52,17 @@ describe("Devplate", () => {
 
       await devplate.initalizeDevplateRepositories();
 
-      expect(devplate.getDevplateRepositories()).resolves.toEqual([]);
+      expect(devplate.getDevplateRepositories()).toEqual([]);
     });
   });
 
-  describe("devplateRepositryExists", () => {
+  describe("devplateRepositoryExists", () => {
     test("should return true if repository exists", async () => {
       devplate["devplateRepositories"] = [
         { name: "Repo1", url: "https://repo1.com" },
       ];
 
-      const exists = await devplate["devplateRepositryExists"]({
+      const exists = devplate["devplateRepositoryExists"]({
         name: "Repo1",
         url: "https://repo1.com",
       });
@@ -75,7 +75,7 @@ describe("Devplate", () => {
         { name: "Repo1", url: "https://repo1.com" },
       ];
 
-      const exists = await devplate["devplateRepositryExists"]({
+      const exists = devplate["devplateRepositoryExists"]({
         name: "Repo2",
         url: "https://repo2.com",
       });
