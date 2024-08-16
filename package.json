@@ -16,6 +16,7 @@
   "license": "MIT",
   "description": "",
   "dependencies": {
+    "firebase": "^10.13.0",
     "inquirer": "^10.0.1",
     "shell": "^0.9.6",
     "shelljs": "^0.8.5",

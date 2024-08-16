@@ -2,8 +2,9 @@ import { promises as fs } from "fs";
 import * as path from "path";
 import inquirer from "inquirer";
 import { Puller } from "../puller/Puller";
+import { writeDevplateRepository } from "../firebase/firebase";
 
-interface DevplateRepository {
+export interface DevplateRepository {
   name: string;
   url: string;
 }
@@ -30,6 +31,15 @@ export class Devplate {
       console.error(e);
     }
     this.devplateRepositories = ret.devplateRepositories;
+    this.writeDevplateRepositoriesToFirebase(this.devplateRepositories);
+  };
+
+  private writeDevplateRepositoriesToFirebase = (
+    repos: DevplateRepository[]
+  ) => {
+    repos.forEach((repo) => {
+      writeDevplateRepository(repo);
+    });
   };
 
   private devplateRepositoryExists = (repository: DevplateRepository) => {
@@ -58,7 +68,7 @@ export class Devplate {
     message: string
   ): Promise<number> => {
     while (true) {
-      await this.logDevplateRepositories();
+      this.logDevplateRepositories();
       const input = await inquirer.prompt({
         name: "devplateRepoId",
         type: "number",
