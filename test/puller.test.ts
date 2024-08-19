@@ -112,4 +112,31 @@ describe("Puller class", () => {
       consoleSpy.mockRestore();
     });
   });
+
+  describe("pullInputedDevplate", () => {
+    test("should throw an error for invalid devplate id", async () => {
+      const invalidDevplateId = "shortxmas/example-devplate-repository/fake-devplate";
+
+      (global.fetch as FetchMock).mockResolvedValue({
+        ok: false,
+      } as Response);
+
+      const consoleSpy = jest.spyOn(console, "log").mockImplementation(() => {});
+      const exitSpy = jest.spyOn(process, "exit").mockImplementation(() => {
+        throw new Error("process.exit was called");
+      });
+
+      await expect(puller.pullInputedDevplate(invalidDevplateId)).rejects.toThrow(
+        "process.exit was called"
+      );
+
+      expect(consoleSpy).toHaveBeenCalledWith(
+        "Pulling Devplate failed, please make sure the Devplate exists."
+      );
+      expect(exitSpy).toHaveBeenCalledWith(0);
+
+      consoleSpy.mockRestore();
+      exitSpy.mockRestore();
+    });
+  });
 });

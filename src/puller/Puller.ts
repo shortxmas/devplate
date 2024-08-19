@@ -91,7 +91,7 @@ export class Puller {
     }
   };
 
-  public pullDevplate = async () => {
+  public pullSelectedDevplate = async () => {
     const devplateId = await this.selectDevplate();
 
     switch (devplateId) {
@@ -111,10 +111,46 @@ export class Puller {
             process.exit(0);
           } catch (error: any) {
             console.log(
-              "The ID you entered doesn't match any Devplate repository."
+              "Pulling Devplate failed! Please make sure the Devplate exists."
             );
           }
         }
+    }
+  };
+
+  public pullInputedDevplate = async (devplateId: string) => {
+    try {
+      const split: string[] = devplateId.split("/");
+      const author = split[0];
+      const repo = split[1];
+      const devplate = split[2];
+
+      const url = `https://github.com/${author}/${repo}`;
+
+      const fetchUrl = this.toGithubApIurl(url);
+
+      if (!fetchUrl) {
+        throw new Error(
+          "Pulling Devplate failed, please make sure the Devplate exists."
+        );
+      }
+      const response = await fetch(fetchUrl);
+      if (!response.ok) {
+        throw new Error(
+          "Pulling Devplate failed, please make sure the Devplate exists."
+        );
+      }
+
+      console.log(`Pulling Devplate ${devplate}`);
+
+      this.cloneGithubSubdirectory(url, devplate);
+
+      process.exit(0);
+    } catch (e) {
+      console.log(
+        "Pulling Devplate failed, please make sure the Devplate exists."
+      );
+      process.exit(0);
     }
   };
 }

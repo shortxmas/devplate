@@ -82,6 +82,28 @@ commandArray.push({
 });
 
 yargs.command({
+  command: "pull <id>",
+  describe: "Pull down a Devplate via Devplate ID",
+  builder: {
+    id: {
+      describe: "Devplate ID to pull",
+      demandOption: true,
+      type: "string",
+    },
+  },
+  async handler(argv) {
+    const devplateInstance = await getDevplateInstance();
+    const devplateId = argv.id;
+    await devplateInstance.pullInputedDevplate(devplateId);
+  },
+});
+
+commandArray.push({
+  command: "pull",
+  arguments: "<id>",
+});
+
+yargs.command({
   command: "view",
   describe: "View devplates",
   async handler() {

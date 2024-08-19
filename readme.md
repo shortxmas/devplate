@@ -38,6 +38,8 @@ You can verify if your repository was added by running ```dp repo view``` or by 
 
 ```dp select``` - Select a Devplate to pull down from a Devplate repository
 
+```dp pull <devplate ID>``` - Pull down a Devplate via its Devplate ID eg. dp pull shortxmas/example-devplate-repository/django-dbfilestore-whitenoise-vercel
+
 ## Contributing
 
 To contribute, please make issues/PRs on the Devplate GitHub repo.
