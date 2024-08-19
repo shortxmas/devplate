@@ -108,7 +108,7 @@ export class Devplate {
             );
             const puller = new Puller(repositories[devplateRepoId - 1].url);
             await puller.initialize();
-            await puller.pullDevplate();
+            await puller.pullSelectedDevplate();
 
             process.exit(0);
           } catch (error: any) {
@@ -118,6 +118,11 @@ export class Devplate {
           }
         }
     }
+  };
+
+  public pullInputedDevplate = async (devplateId: string) => {
+    const puller = new Puller("");
+    await puller.pullInputedDevplate(devplateId);
   };
 
   public viewDevplates = async (): Promise<void> => {
