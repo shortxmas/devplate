@@ -6,6 +6,7 @@
 2. [Getting Started](#getting-started)
 2. [Commands](#commands)
 3. [Contributing](#contributing)
+4. [Devplate Diagram](#devplate-diagram)
 
 ## Installation
 
@@ -42,3 +43,6 @@ You can verify if your repository was added by running ```dp repo view``` or by 
 To contribute, please make issues/PRs on the Devplate GitHub repo.
 
 **Devplate is currently in its early stages and may not work fully. Please make issues for any errors encountered at https://github.com/shortxmas/devplate/issues**
+
+## Devplate Diagram
+![devplate drawio (5)](https://github.com/user-attachments/assets/eefab22b-5883-4cf7-8d40-582defcc09c6)
