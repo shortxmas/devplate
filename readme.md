@@ -5,6 +5,7 @@
 1. [Installation](#installation)
 2. [Getting Started](#getting-started)
 2. [Commands](#commands)
+3. [Devplate Site](#devplate-site)
 3. [Contributing](#contributing)
 4. [Devplate Diagram](#devplate-diagram)
 
@@ -12,6 +13,8 @@
 
 https://www.npmjs.com/package/devplate
 Run ```npm install -g devplate``` to install the Devplate CLI globally.
+
+Make sure you have the Git CLI installed.
 
 ## Getting Started
 
@@ -39,6 +42,10 @@ You can verify if your repository was added by running ```dp repo view``` or by 
 ```dp select``` - Select a Devplate to pull down from a Devplate repository
 
 ```dp pull <devplate ID>``` - Pull down a Devplate via its Devplate ID eg. dp pull shortxmas/example-devplate-repository/django-dbfilestore-whitenoise-vercel
+
+## Devplate Site
+
+To view and search through all public Devplates along with their pull commands, go to https://devplate-site.vercel.app/
 
 ## Contributing
 
